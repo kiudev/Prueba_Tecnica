@@ -54,10 +54,10 @@ app.post("/books", async (req, res) => {
    try {
       const values = {
          title: req.body.title,
+         synopsis: req.body.synopsis,
          author: req.body.author,
          genre: req.body.genre,
          year: req.body.year,
-         price: req.body.price,
       };
 
       const bookRef = booksCollection.doc();
@@ -77,10 +77,10 @@ app.put("/books/:id", async (req, res) => {
       console.log(req.body);
       const values = {
          title: req.body.title,
+         synopsis: req.body.synopsis,
          author: req.body.author,
          genre: req.body.genre,
          year: req.body.year,
-         price: req.body.price,
       };
 
       const bookRef = booksCollection.doc(req.params.id);
