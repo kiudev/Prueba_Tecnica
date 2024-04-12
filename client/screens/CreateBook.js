@@ -3,7 +3,7 @@ import { colorPalette } from "../colorPalette";
 import Back from "../components/svg/Back";
 import { useState } from "react";
 
-export default function CreateBook({ getBooks, navigation }) {
+export default function CreateBook({ navigation }) {
    const [book, setBook] = useState({
       title: "",
       synopsis: "",

@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
-import Book from "./screens/Book";
+import BookDetails from "./screens/BookDetails";
 import CreateBook from "./screens/CreateBook";
 
 const Stack = createNativeStackNavigator();
@@ -17,8 +17,8 @@ export default function App() {
             />
 
             <Stack.Screen
-               name="Book"
-               component={Book}
+               name="Book Details"
+               component={BookDetails}
                options={{ headerShown: false }}
             />
 

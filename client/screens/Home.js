@@ -16,20 +16,65 @@ import Create from "../components/svg/Create";
 
 const buttons = [
    {
-      id: "1",
+      id: 1,
       name: "Todo",
    },
    {
-      id: "2",
+      id: 2,
       name: "Más vendidos",
    },
    {
-      id: "3",
+      id: 3,
       name: "Ficción",
    },
    {
-      id: "4",
+      id: 4,
       name: "No Ficción",
+   },
+];
+
+const booksCard = [
+   {
+      id: 1,
+      title: "Titulo 1",
+      genre: "Genero 1",
+      author: "Autor 1",
+      synospsis: "Sinopsis 1",
+   },
+   {
+      id: 2,
+      title: "Titulo 2",
+      genre: "Genero 2",
+      author: "Autor 2",
+      synospsis: "Sinopsis 2",
+   },
+   {
+      id: 3,
+      title: "Titulo 3",
+      genre: "Genero 3",
+      author: "Autor 3",
+      synospsis: "Sinopsis 3",
+   },
+   {
+      id: 4,
+      title: "Titulo",
+      genre: "Genero",
+      author: "Autor",
+      synospsis: "Sinopsis",
+   },
+   {
+      id: 5,
+      title: "Titulo",
+      genre: "Genero",
+      author: "Autor",
+      synospsis: "Sinopsis",
+   },
+   {
+      id: 6,
+      title: "Titulo",
+      genre: "Genero",
+      author: "Autor",
+      synospsis: "Sinopsis",
    },
 ];
 
@@ -52,49 +97,83 @@ export default function Home({ navigation }) {
    }, [books]);
 
    return (
-      <ScrollView style={styles.container}>
-            <Image
-               style={styles.image}
-               source={require("../assets/user.png")}
+      <View style={styles.container}>
+         <Image style={styles.image} source={require("../assets/user.png")} />
+
+         <View style={styles.header}>
+            {buttons.map(button => (
+               <View key={button.id}>
+                  <Pressable style={buttonStyles.button}>
+                     <Text style={buttonStyles.text}>{button.name}</Text>
+                  </Pressable>
+               </View>
+            ))}
+         </View>
+
+         <View style={searchStyles.container}>
+            <Search style={searchStyles.icon} />
+            <TextInput
+               style={searchStyles.input}
+               selectionColor={colorPalette[0]}
+               placeholder="Buscar"
             />
+         </View>
 
-            <View style={styles.header}>
-               {buttons.map(button => (
-                  <View key={button.id}>
-                     <Pressable style={buttonStyles.button}>
-                        <Text style={buttonStyles.text}>{button.name}</Text>
-                     </Pressable>
-                  </View>
-               ))}
-            </View>
-
-            <View style={searchStyles.container}>
-               <Search style={searchStyles.icon} />
-               <TextInput
-                  style={searchStyles.input}
-                  selectionColor={colorPalette[0]}
-                  placeholder="Buscar"
-               />
-            </View>
-
+         {/* <ScrollView>
             {books.map((book, index) => (
-               <View style={bookStyles.container} key={index}>
+               <Pressable
+                  style={bookStyles.container}
+                  key={index}
+                  onPress={() =>
+                     navigation.navigate("Book Details", {
+                        title: book.title,
+                        genre: book.genre,
+                        author: book.author,
+                        synopsis: book.synopsis,
+                        year: book.year,
+                     })
+                  }
+               >
                   <View style={bookStyles.header}>
                      <Text style={bookStyles.title}>{book.title}</Text>
                      <Text style={bookStyles.genre}>{book.genre}</Text>
                   </View>
                   <Text style={bookStyles.author}>{book.author}</Text>
                   <Text style={bookStyles.author}>{book.synopsis}</Text>
-               </View>
+               </Pressable>
             ))}
+         </ScrollView> */}
 
-            <Create
-               onPress={() => navigation.navigate("Create Book")}
-               style={buttonStyles.createButton}
-            />
+         <ScrollView>
+            {booksCard.map(book => (
+               <Pressable
+                  style={bookStyles.container}
+                  key={book.id}
+                  onPress={() => navigation.navigate("Book Details", {
+                     title: book.title,
+                     genre: book.genre,
+                     author: book.author,
+                     synopsis: book.synopsis,
+                     year: book.year,
+                  })}
+               >
+                  <View style={bookStyles.header}>
+                     <Text style={bookStyles.title}>{book.title}</Text>
+                     <Text style={bookStyles.genre}>{book.genre}</Text>
+                  </View>
+                  <Text style={bookStyles.author}>{book.author}</Text>
+                  <Text style={bookStyles.author}>{book.synopsis}</Text>
+               </Pressable>
+            ))}
+         </ScrollView>
 
-            <StatusBar style="auto" />
-      </ScrollView>
+         <Create
+            onPress={() => navigation.navigate("Create Book")}
+            style={buttonStyles.createButton}
+         />
+
+         <StatusBar style="auto" />
+      </View>
    );
 }
 
@@ -167,9 +246,8 @@ const buttonStyles = StyleSheet.create({
 
    createButton: {
       position: "absolute",
-      bottom: 0,
-      right: 0,
-      left: 0,
+      alignSelf: "center",
+      bottom: 30,
    },
 });
 
@@ -190,11 +268,13 @@ const bookStyles = StyleSheet.create({
    title: {
       fontWeight: "bold",
       fontSize: 20,
+      color: colorPalette[0],
    },
 
    author: {
       opacity: 0.5,
       fontSize: 16,
+      color: colorPalette[0],
    },
 
    genre: {
