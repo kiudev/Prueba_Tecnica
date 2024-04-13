@@ -1,5 +1,6 @@
 import React from "react";
 import Svg, { Path } from "react-native-svg"
+import { colorPalette } from "../../colorPalette";
 
 export default function Back(props) {
    return (
@@ -10,7 +11,7 @@ export default function Back(props) {
          viewBox="0 0 20 20"
          {...props}
       >
-         <Path fill="#181D31" d="M.75 10 6 4.5V8h13v4H6v3.5z" />
+         <Path fill={colorPalette[0]} d="M.75 10 6 4.5V8h13v4H6v3.5z" />
       </Svg>
    );
 }
