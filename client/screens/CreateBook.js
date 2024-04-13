@@ -24,7 +24,7 @@ export default function CreateBook({ navigation }) {
                synopsis: book.synopsis,
                author: book.author,
                genre: book.genre,
-               year: book.year
+               year: book.year,
             }),
          });
 
@@ -47,12 +47,14 @@ export default function CreateBook({ navigation }) {
 
          <View style={styles.inputContainer}>
             <TextInput
+               maxLength={25}
                onChangeText={value => setBook({ ...book, title: value })}
                style={styles.input}
                selectionColor={colorPalette[0]}
                placeholder="Título"
             />
             <TextInput
+               multiline={true}
                onChangeText={value => setBook({ ...book, synopsis: value })}
                style={styles.input}
                selectionColor={colorPalette[0]}
@@ -65,6 +67,7 @@ export default function CreateBook({ navigation }) {
                placeholder="Autor"
             />
             <TextInput
+               maxLength={15}
                onChangeText={value => setBook({ ...book, genre: value })}
                style={styles.input}
                selectionColor={colorPalette[0]}
@@ -113,6 +116,8 @@ const styles = StyleSheet.create({
    },
 
    createButton: {
+      position: 'absolute',
+      bottom: 40,
       alignSelf: "center",
       marginTop: 100,
       backgroundColor: colorPalette[0],
