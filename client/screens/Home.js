@@ -7,7 +7,7 @@ import {
    Image,
    TextInput,
    ScrollView,
-   ActivityIndicator
+   ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -40,8 +40,9 @@ const booksCard = [
       title: "Titulotitulotilasdasd",
       genre: "Genero 1",
       author: "Autor 1",
-      synopsis: "Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship. Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship.Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship.",
-      year: 2011
+      synopsis:
+         "Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship. Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship.Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship.",
+      year: 2011,
    },
    {
       id: 2,
@@ -83,13 +84,13 @@ const booksCard = [
 export default function Home({ navigation }) {
    const [books, setBooks] = useState([]);
    const [loading, setLoading] = useState(true);
+   const [searchBook, setSearchBook] = useState([]);
 
    const getBooks = () => {
       fetch("http://192.168.1.56:3000/books")
          .then(response => response.json())
          .then(data => {
             setBooks(data);
-
             setTimeout(() => {
                setLoading(false);
             }, 1000);
@@ -100,8 +101,27 @@ export default function Home({ navigation }) {
    };
 
    useEffect(() => {
-      getBooks();
-   }, [books]);
+      const cleanUp = navigation.addListener("focus", async () => {
+         getBooks();
+      });
+
+      return cleanUp;
+   }, [navigation]);
+
+   const handleSearch = text => {
+      const searchText = text.toUpperCase();
+      let filteredBooks;
+
+      if (searchText === "") {
+         setSearchBook(books);
+      } else {
+         filteredBooks = books.filter(book =>
+            book.title.toUpperCase().includes(searchText)
+         );
+         setSearchBook(filteredBooks);
+      }
+
+   };
 
    return (
       <View style={styles.container}>
@@ -119,25 +139,28 @@ export default function Home({ navigation }) {
 
          <View style={searchStyles.container}>
             <Search style={searchStyles.icon} />
+
             <TextInput
+               onChangeText={handleSearch}
                style={searchStyles.input}
                selectionColor={colorPalette[0]}
                placeholder="Buscar"
             />
          </View>
 
-         {/* {loading ? (
+         {loading ? (
             <View style={styles.container}>
-               <ActivityIndicator size='large' color={colorPalette[0]} />
+               <ActivityIndicator size="large" color={colorPalette[0]} />
             </View>
          ) : (
             <ScrollView>
-               {books.map((book, index) => (
+               {searchBook.map((book, index) => (
                   <Pressable
                      style={bookStyles.container}
                      key={index}
                      onPress={() =>
                         navigation.navigate("Book Details", {
+                           id: book.id,
                            title: book.title,
                            genre: book.genre,
                            author: book.author,
@@ -151,13 +174,15 @@ export default function Home({ navigation }) {
                         <Text style={bookStyles.genre}>{book.genre}</Text>
                      </View>
                      <Text style={bookStyles.author}>{book.author}</Text>
-                     <Text numberOfLines={3} style={bookStyles.synopsis}>{book.synopsis}</Text>
+                     <Text numberOfLines={3} style={bookStyles.synopsis}>
+                        {book.synopsis}
+                     </Text>
                   </Pressable>
                ))}
             </ScrollView>
-         )} */}
+         )}
 
-         <ScrollView>
+         {/* <ScrollView>
             {booksCard.map(book => (
                <Pressable
                   style={bookStyles.container}
@@ -178,7 +203,7 @@ export default function Home({ navigation }) {
                   <Text style={bookStyles.synopsis}>{book.synopsis}</Text>
                </Pressable>
             ))}
-         </ScrollView>
+         </ScrollView> */}
 
          <Create
             onPress={() => navigation.navigate("Create Book")}
@@ -299,5 +324,5 @@ const bookStyles = StyleSheet.create({
    synopsis: {
       color: colorPalette[0],
       fontSize: 14,
-   }
+   },
 });

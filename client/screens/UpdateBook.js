@@ -1,55 +1,64 @@
 import {
    View,
    Text,
-   Pressable,
-   TextInput,
    StyleSheet,
    ScrollView,
+   TextInput,
+   Pressable,
 } from "react-native";
-import { colorPalette } from "../colorPalette";
 import Back from "../components/svg/Back";
+import { colorPalette } from "../colorPalette";
 import { useState } from "react";
 
-export default function CreateBook({ navigation }) {
+export default function UpdateBook({ navigation, route }) {
+   const { id, title, synopsis, author, genre, year } = route.params;
+
    const [book, setBook] = useState({
-      title: "",
-      synopsis: "",
-      author: "",
-      genre: "",
-      year: "",
+      title: title,
+      synopsis: synopsis,
+      author: author,
+      genre: genre,
+      year: year,
    });
 
-   const handleSubmit = async e => {
-      e.preventDefault();
-
+   const handleUpdateBook = async (id) => {
       try {
-         const response = await fetch("http://192.168.1.56:3000/books", {
-            method: "POST",
+         const response = await fetch(`http://192.168.1.56:3000/books/${id}`, {
+            method: 'PUT',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                title: book.title,
                synopsis: book.synopsis,
                author: book.author,
                genre: book.genre,
-               year: book.year,
-            }),
-         });
+               year: book.year
+            })
+         })
 
          if (response.ok) {
             navigation.navigate("Home");
          } else {
-            console.log("Response failed");
+            console.log("Failed to fetch" . response.statusText);
          }
       } catch (error) {
-         console.error("Error creating book", error);
+         console.error("Error updating book" . error)
       }
-   };
+   }
 
    return (
       <View style={styles.container}>
          <Back
             style={styles.backButton}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() =>
+               navigation.navigate("Book Details", {
+                  id: id,
+                  title: title,
+                  synopsis: synopsis,
+                  author: author,
+                  genre: genre,
+                  year: year,
+               })
+            }
          />
 
          <ScrollView>
@@ -60,6 +69,7 @@ export default function CreateBook({ navigation }) {
                   style={styles.input}
                   selectionColor={colorPalette[0]}
                   placeholder="Título"
+                  value={book.title}
                />
                <TextInput
                   multiline={true}
@@ -67,12 +77,14 @@ export default function CreateBook({ navigation }) {
                   style={styles.input}
                   selectionColor={colorPalette[0]}
                   placeholder="Sinopsis"
+                  value={book.synopsis}
                />
                <TextInput
                   onChangeText={value => setBook({ ...book, author: value })}
                   style={styles.input}
                   selectionColor={colorPalette[0]}
                   placeholder="Autor"
+                  value={book.author}
                />
                <TextInput
                   maxLength={15}
@@ -80,18 +92,20 @@ export default function CreateBook({ navigation }) {
                   style={styles.input}
                   selectionColor={colorPalette[0]}
                   placeholder="Género"
+                  value={book.genre}
                />
                <TextInput
                   onChangeText={value => setBook({ ...book, year: value })}
                   style={styles.input}
                   selectionColor={colorPalette[0]}
                   placeholder="Año"
+                  value={book.year}
                />
             </View>
          </ScrollView>
 
-         <Pressable onPress={handleSubmit} style={styles.createButton}>
-            <Text style={styles.textButton}>Crear</Text>
+         <Pressable onPress={() => handleUpdateBook(id)} style={styles.createButton}>
+            <Text style={styles.textButton}>Actualizar</Text>
          </Pressable>
       </View>
    );

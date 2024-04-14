@@ -2,7 +2,7 @@ import React from "react";
 import Svg, { G, Path } from "react-native-svg";
 import { colorPalette } from "../../colorPalette";
 
-export default function Edit(props) {
+export default function Update(props) {
    return (
       <Svg
          xmlns="http://www.w3.org/2000/svg"

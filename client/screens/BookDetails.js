@@ -8,10 +8,12 @@ import {
 } from "react-native";
 import Back from "../components/svg/Back";
 import { colorPalette } from "../colorPalette";
-import Edit from "../components/svg/Edit";
+import Update from "../components/svg/Update";
 import Delete from "../components/svg/Delete";
 
 export default function BookDetails({ navigation, route }) {
+   const { id, title, synopsis, author, genre, year } = route.params;
+
    const renderItem = ({ item }) => {
       return (
          <ScrollView>
@@ -31,6 +33,23 @@ export default function BookDetails({ navigation, route }) {
       );
    };
 
+   const deleteBook = async id => {
+      try {
+         const response = await fetch(`http://192.168.1.56:3000/books/${id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+         });
+
+         if (response.ok) {
+            navigation.navigate("Home");
+         } else {
+            console.log("Error deleting book" . response.statusText);
+         }
+      } catch (error) {
+         console.error(`Response error: ${error}`);
+      }
+   };
+
    return (
       <View style={styles.container}>
          <Back
@@ -43,9 +62,24 @@ export default function BookDetails({ navigation, route }) {
             renderItem={renderItem}
             keyExtractor={item => item.title}
          />
+
          <View style={styles.footer}>
-         <Edit style={styles.editButton} />
-         <Delete style={styles.deleteButton} />
+            <Update
+               onPress={() => navigation.navigate("Update Book", {
+                  id: id,
+                  title: title,
+                  synopsis: synopsis,
+                  author: author,
+                  genre: genre,
+                  year: year
+               })}
+               style={styles.editButton}
+            />
+
+            <Delete
+               onPress={() => deleteBook(id)}
+               style={styles.deleteButton}
+            />
          </View>
       </View>
    );
@@ -67,10 +101,10 @@ const styles = StyleSheet.create({
    },
 
    footer: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 30,
       alignSelf: "center",
-      flexDirection: 'row',
+      flexDirection: "row",
       alignItems: "center",
       gap: 50,
    },
@@ -81,12 +115,12 @@ const styles = StyleSheet.create({
 
    editButton: {
       backgroundColor: colorPalette[0],
-      borderRadius: 50
+      borderRadius: 50,
    },
 
    deleteButton: {
       backgroundColor: colorPalette[0],
-      borderRadius: 50
+      borderRadius: 50,
    },
 
    image: {
@@ -108,6 +142,7 @@ const styles = StyleSheet.create({
       color: colorPalette[2],
       marginTop: 20,
       fontWeight: "bold",
+      fontStyle: "italic",
    },
 
    synopsis: {
@@ -116,7 +151,7 @@ const styles = StyleSheet.create({
    },
 
    synopsisTitle: {
-      fontSize: 24,
+      fontSize: 30,
       marginTop: 10,
       fontWeight: "bold",
    },

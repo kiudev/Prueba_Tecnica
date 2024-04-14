@@ -28,7 +28,7 @@ app.get("/books", async (req, res) => {
       const books = [];
 
       booksRef.forEach(doc => {
-         books.push(doc.data());
+         books.push({...doc.data(), id: doc.id});
       });
 
       return res.json(books);
@@ -74,7 +74,6 @@ app.post("/books", async (req, res) => {
 // Endpoint to update a book by its id from client to database
 app.put("/books/:id", async (req, res) => {
    try {
-      console.log(req.body);
       const values = {
          title: req.body.title,
          synopsis: req.body.synopsis,
