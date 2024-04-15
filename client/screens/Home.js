@@ -8,78 +8,13 @@ import {
    TextInput,
    ScrollView,
    ActivityIndicator,
+   FlatList,
 } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { colorPalette } from "../colorPalette";
 import Search from "../components/svg/Search";
 import Create from "../components/svg/Create";
-
-const buttons = [
-   {
-      id: 1,
-      name: "Todo",
-   },
-   {
-      id: 2,
-      name: "Más vendidos",
-   },
-   {
-      id: 3,
-      name: "Ficción",
-   },
-   {
-      id: 4,
-      name: "No Ficción",
-   },
-];
-
-const booksCard = [
-   {
-      id: 1,
-      title: "Titulotitulotilasdasd",
-      genre: "Genero 1",
-      author: "Autor 1",
-      synopsis:
-         "Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship. Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship.Story about a young woman who discovers a mysterious book that transports her to different worlds. Along the way, she meets new friends and faces dangerous challenges. With humor and heart, this novel explores the power of imagination and the importance of friendship.",
-      year: 2011,
-   },
-   {
-      id: 2,
-      title: "Titulo 2",
-      genre: "Genero 2",
-      author: "Autor 2",
-      synopsis: "Sinopsis 2",
-   },
-   {
-      id: 3,
-      title: "Titulo 3",
-      genre: "Genero 3",
-      author: "Autor 3",
-      synopsis: "Sinopsis 3",
-   },
-   {
-      id: 4,
-      title: "Titulo",
-      genre: "Genero",
-      author: "Autor",
-      synopsis: "Sinopsis",
-   },
-   {
-      id: 5,
-      title: "Titulo",
-      genre: "Genero",
-      author: "Autor",
-      synopsis: "Sinopsis",
-   },
-   {
-      id: 6,
-      title: "Titulo",
-      genre: "Genero",
-      author: "Autor",
-      synopsis: "Sinopsis",
-   },
-];
 
 export default function Home({ navigation }) {
    const [books, setBooks] = useState([]);
@@ -110,32 +45,53 @@ export default function Home({ navigation }) {
 
    const handleSearch = text => {
       const searchText = text.toUpperCase();
-      let filteredBooks;
 
-      if (searchText === "") {
-         setSearchBook(books);
-      } else {
-         filteredBooks = books.filter(book =>
-            book.title.toUpperCase().includes(searchText)
-         );
-         setSearchBook(filteredBooks);
-      }
+      const filteredBooks = books.filter(book =>
+         book.title.toUpperCase().includes(searchText)
+      );
+      setSearchBook(filteredBooks);
+   };
 
+   useEffect(() => {
+      setSearchBook(books);
+   }, [books]);
+
+   const renderItem = ({ item }) => {
+      return (
+         <ScrollView>
+            <Pressable
+               style={bookStyles.container}
+               onPress={() =>
+                  navigation.navigate("Book Details", {
+                     id: item.id,
+                     title: item.title,
+                     genre: item.genre,
+                     author: item.author,
+                     synopsis: item.synopsis,
+                     year: item.year,
+                  })
+               }
+            >
+               
+               <View style={bookStyles.header}>
+                  <Text style={bookStyles.title}>{item.title}</Text>
+
+                  <Text style={bookStyles.genre}>{item.genre}</Text>
+               </View>
+
+               <Text style={bookStyles.author}>{item.author}</Text>
+
+               <Text numberOfLines={3} style={bookStyles.synopsis}>
+                  {item.synopsis}
+               </Text>
+            </Pressable>
+         </ScrollView>
+      );
    };
 
    return (
       <View style={styles.container}>
          <Image style={styles.image} source={require("../assets/user.png")} />
-
-         <View style={styles.header}>
-            {buttons.map(button => (
-               <View key={button.id}>
-                  <Pressable style={buttonStyles.button}>
-                     <Text style={buttonStyles.text}>{button.name}</Text>
-                  </Pressable>
-               </View>
-            ))}
-         </View>
 
          <View style={searchStyles.container}>
             <Search style={searchStyles.icon} />
@@ -153,57 +109,12 @@ export default function Home({ navigation }) {
                <ActivityIndicator size="large" color={colorPalette[0]} />
             </View>
          ) : (
-            <ScrollView>
-               {searchBook.map((book, index) => (
-                  <Pressable
-                     style={bookStyles.container}
-                     key={index}
-                     onPress={() =>
-                        navigation.navigate("Book Details", {
-                           id: book.id,
-                           title: book.title,
-                           genre: book.genre,
-                           author: book.author,
-                           synopsis: book.synopsis,
-                           year: book.year,
-                        })
-                     }
-                  >
-                     <View style={bookStyles.header}>
-                        <Text style={bookStyles.title}>{book.title}</Text>
-                        <Text style={bookStyles.genre}>{book.genre}</Text>
-                     </View>
-                     <Text style={bookStyles.author}>{book.author}</Text>
-                     <Text numberOfLines={3} style={bookStyles.synopsis}>
-                        {book.synopsis}
-                     </Text>
-                  </Pressable>
-               ))}
-            </ScrollView>
+            <FlatList
+               data={searchBook}
+               renderItem={renderItem}
+               keyExtractor={item => item.id}
+            />
          )}
-
-         {/* <ScrollView>
-            {booksCard.map(book => (
-               <Pressable
-                  style={bookStyles.container}
-                  key={book.id}
-                  onPress={() => navigation.navigate("Book Details", {
-                     title: book.title,
-                     genre: book.genre,
-                     author: book.author,
-                     synopsis: book.synopsis,
-                     year: book.year,
-                  })}
-               >
-                  <View style={bookStyles.header}>
-                     <Text style={bookStyles.title}>{book.title}</Text>
-                     <Text style={bookStyles.genre}>{book.genre}</Text>
-                  </View>
-                  <Text style={bookStyles.author}>{book.author}</Text>
-                  <Text style={bookStyles.synopsis}>{book.synopsis}</Text>
-               </Pressable>
-            ))}
-         </ScrollView> */}
 
          <Create
             onPress={() => navigation.navigate("Create Book")}
