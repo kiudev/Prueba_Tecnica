@@ -71,6 +71,7 @@ export default function UpdateBook({ navigation, route }) {
                   placeholder="Título"
                   value={book.title}
                />
+
                <TextInput
                   multiline={true}
                   onChangeText={value => setBook({ ...book, synopsis: value })}
@@ -79,6 +80,7 @@ export default function UpdateBook({ navigation, route }) {
                   placeholder="Sinopsis"
                   value={book.synopsis}
                />
+
                <TextInput
                   onChangeText={value => setBook({ ...book, author: value })}
                   style={styles.input}
@@ -86,6 +88,7 @@ export default function UpdateBook({ navigation, route }) {
                   placeholder="Autor"
                   value={book.author}
                />
+
                <TextInput
                   maxLength={15}
                   onChangeText={value => setBook({ ...book, genre: value })}
@@ -94,6 +97,7 @@ export default function UpdateBook({ navigation, route }) {
                   placeholder="Género"
                   value={book.genre}
                />
+               
                <TextInput
                   onChangeText={value => setBook({ ...book, year: value })}
                   style={styles.input}

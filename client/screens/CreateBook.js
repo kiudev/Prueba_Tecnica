@@ -61,6 +61,7 @@ export default function CreateBook({ navigation }) {
                   selectionColor={colorPalette[0]}
                   placeholder="Título"
                />
+
                <TextInput
                   multiline={true}
                   onChangeText={value => setBook({ ...book, synopsis: value })}
@@ -68,19 +69,22 @@ export default function CreateBook({ navigation }) {
                   selectionColor={colorPalette[0]}
                   placeholder="Sinopsis"
                />
+
                <TextInput
                   onChangeText={value => setBook({ ...book, author: value })}
                   style={styles.input}
                   selectionColor={colorPalette[0]}
                   placeholder="Autor"
                />
+
                <TextInput
-                  maxLength={15}
+                  maxLength={20}
                   onChangeText={value => setBook({ ...book, genre: value })}
                   style={styles.input}
                   selectionColor={colorPalette[0]}
                   placeholder="Género"
                />
+               
                <TextInput
                   onChangeText={value => setBook({ ...book, year: value })}
                   style={styles.input}
