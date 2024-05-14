@@ -1,7 +1,7 @@
 // Imports
 const express = require("express");
 const admin = require("firebase-admin");
-const serviceAccount = require("./service-account.json");
+import { serviceAccount } from "./serviceAccount";
 import { dbURL } from "./dbURL";
 
 // Initialize Firebase Admin with service account and database URL
