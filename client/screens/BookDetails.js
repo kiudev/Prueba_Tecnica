@@ -10,6 +10,7 @@ import Back from "../components/svg/Back";
 import { colorPalette } from "../colorPalette";
 import Update from "../components/svg/Update";
 import Delete from "../components/svg/Delete";
+import { myIp } from "./myIP";
 
 export default function BookDetails({ navigation, route }) {
    const { id, title, synopsis, author, genre, year } = route.params;
@@ -35,7 +36,7 @@ export default function BookDetails({ navigation, route }) {
 
    const deleteBook = async id => {
       try {
-         const response = await fetch(`http://192.168.1.56:3000/books/${id}`, {
+         const response = await fetch(`${myIp}:3000/books/${id}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
          });

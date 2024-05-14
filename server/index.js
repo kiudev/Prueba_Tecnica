@@ -2,11 +2,12 @@
 const express = require("express");
 const admin = require("firebase-admin");
 const serviceAccount = require("./service-account.json");
+import { dbURL } from "./dbURL";
 
 // Initialize Firebase Admin with service account and database URL
 admin.initializeApp({
    credential: admin.credential.cert(serviceAccount),
-   dbURL: "https://prueba-tecnica-894e4.firebaseio.com",
+   dbURL: dbURL,
 });
 
 // Get instance of Firestore Database

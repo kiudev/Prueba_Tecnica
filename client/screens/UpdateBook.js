@@ -9,6 +9,7 @@ import {
 import Back from "../components/svg/Back";
 import { colorPalette } from "../colorPalette";
 import { useState } from "react";
+import { myIp } from "./myIP";
 
 export default function UpdateBook({ navigation, route }) {
    const { id, title, synopsis, author, genre, year } = route.params;
@@ -23,7 +24,7 @@ export default function UpdateBook({ navigation, route }) {
 
    const handleUpdateBook = async (id) => {
       try {
-         const response = await fetch(`http://192.168.1.56:3000/books/${id}`, {
+         const response = await fetch(`${myIp}:3000/books/${id}`, {
             method: 'PUT',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { colorPalette } from "../colorPalette";
 import Search from "../components/svg/Search";
 import Create from "../components/svg/Create";
+import { myIp } from "./myIP";
 
 export default function Home({ navigation }) {
    const [books, setBooks] = useState([]);
@@ -22,7 +23,7 @@ export default function Home({ navigation }) {
    const [searchBook, setSearchBook] = useState([]);
 
    const getBooks = () => {
-      fetch("http://192.168.1.56:3000/books")
+      fetch(`${myIp}:3000/books`)
          .then(response => response.json())
          .then(data => {
             setBooks(data);

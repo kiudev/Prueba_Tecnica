@@ -9,6 +9,7 @@ import {
 import { colorPalette } from "../colorPalette";
 import Back from "../components/svg/Back";
 import { useState } from "react";
+import { myIp } from "./myIP";
 
 export default function CreateBook({ navigation }) {
    const [book, setBook] = useState({
@@ -23,7 +24,7 @@ export default function CreateBook({ navigation }) {
       e.preventDefault();
 
       try {
-         const response = await fetch("http://192.168.1.56:3000/books", {
+         const response = await fetch(`${myIp}:3000/books`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -84,7 +85,7 @@ export default function CreateBook({ navigation }) {
                   selectionColor={colorPalette[0]}
                   placeholder="Género"
                />
-               
+
                <TextInput
                   onChangeText={value => setBook({ ...book, year: value })}
                   style={styles.input}
